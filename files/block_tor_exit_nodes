@@ -1,0 +1,54 @@
+#!/bin/bash
+# Cron this however you like.
+# I got the idea from this http://hackertarget.com/tor-exit-node-visualization/
+
+wget="http://torstatus.blutmagie.de/ip_list_exit.php/Tor_ip_list_EXIT.csv"
+outputfile="/tmp/Tor_ip_list_EXIT.csv"
+
+
+check_if_root () {
+if [[ $EUID -ne 0 ]]; then
+echo "This script must be run as root"
+   exit 1
+fi
+}
+
+get_exit_nodes () {
+if [ ! -e "$outputfile"  ];
+
+  then echo "No Tor list found, Downloading One"
+  wget -O$outputfile $wget
+#--output-file="$outputfile" " " "$wget"
+
+elif [[ "$(find $outputfile -mtime -1  -type f > /dev/null)" ]] ;
+
+  then echo "found old Tor list downloading a new one"
+  rm $outputfile
+  wget -O$outputfile $wget
+#--output-file="$outputfile" " " "$wget"
+
+fi
+}
+
+block () {
+
+echo -n "Reading List"
+tor=$(< "$outputfile")
+echo " ..done"
+
+echo -n "Flushing Input Chain"
+iptables -F INPUT
+echo " ..done"
+
+echo -n "Blocking all exit nodes"
+for ips in ${tor[@]};
+
+  do
+    iptables -I INPUT -s $ips -j DROP
+  done;
+echo " ..done"
+}
+
+check_if_root
+get_exit_nodes
+block

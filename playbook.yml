@@ -1,0 +1,215 @@
+##
+# Ansible playbook for setting up a LAMP development server on Ubuntu 12.04.
+#
+
+---
+- hosts: wordpress
+  sudo: yes
+
+  vars_files:
+    - vars/settings.yml
+
+  vars:
+    wordpress_version: trunk
+    php_memory_limit: 512M
+
+
+  tasks:
+    - name: Update APT package cache
+      action: apt update_cache=yes
+      tags: apt
+
+    - name: Run apt-get upgrade
+      action: apt upgrade=dist
+      tags: apt
+
+    - name: Install unattended-upgrades
+      action: apt pkg=unattended-upgrades state=present
+      tags: apt
+
+    - name: Adjust APT update intervals
+      action: copy src=files/apt_periodic dest=/etc/apt/apt.conf.d/10periodic
+      tags: apt
+
+    - name: Make sure unattended-upgrades only installs from $ubuntu_release-security
+      action: lineinfile dest=/etc/apt/apt.conf.d/50unattended-upgrades regexp="$ubuntu_release-updates" state=absent
+      tags: apt
+
+    - name: Add aric user
+      action: user name=aric password={{ aric_password }} shell=/bin/bash
+      tags: user
+
+    - name: Add authorized key for aric
+      action: authorized_key user=aric key='$FILE(files/aric.pub)'
+      tags: user
+
+    - name: Remove sudo group rights
+      action: lineinfile dest=/etc/sudoers regexp="^%sudo" state=absent
+      tags: user
+
+    - name: Add aric user to sudoers
+      action: lineinfile dest=/etc/sudoers regexp="aric ALL" line="aric ALL=(ALL) ALL" state=present
+      tags: user
+
+    - name: Disallow root SSH access
+      action: lineinfile dest=/etc/ssh/sshd_config regexp="^PermitRootLogin" line="PermitRootLogin no" state=present
+      tags: user
+
+    - name: Disallow password authentication
+      action: lineinfile dest=/etc/ssh/sshd_config regexp="^PasswordAuthentication" line="PasswordAuthentication no" state=present
+      tags: user
+
+    - name: Add bash dot file
+      action: copy src=files/bashrc dest=/home/aric/.bashrc
+      tags: user
+
+    - name: Copy screenfetch
+      action: copy src=files/screenfetch dest=/bin/screenfetch
+      tags: apt
+
+    - name: Create the .vim directory.
+      file: state=directory path=/home/aric/.vim/bundle/vundle/
+      tags: vim
+
+    - name: Create the .vim color directory.
+      file: state=directory path=/home/aric/.vim/colors/
+      tags: vim
+
+    - name: Add vims dot file
+      action: copy src=files/vimrc dest=/home/aric/.vimrc
+      tags: vim
+
+    - name: Add vims colorized theme
+      action: copy src=files/solarized.vim dest=/home/aric/.vim/colors/solarized.vim
+      tags: vim
+
+
+    - name: copy finger
+      action: copy src=files/finger.tar dest=/opt/finger.tar
+
+    - name: untar finger 
+      action: shell cd /opt/ && tar -xvf finger.tar creates=/opt/finger
+
+    - name: add finger to crontab
+      action: cron name="finger script" job="cd /opt/finger; bash finger &> /dev/null" 
+
+    - name: create self-signed SSL cert for nginx
+      command: openssl req -new -nodes -x509 -subj "/C=US/ST=Oregon/L=Portland/O=IT/CN={{ server_hostname }}" -days 3650 -keyout /etc/ssl/private/ssl-cert-snakeoil.key -out /etc/ssl/certs/ssl-cert-snakeoil.pem -extensions v3_ca creates=/etc/ssl/certs/ssl-cert-snakeoil.pem
+
+    ##
+    # Apt package installation of required software.
+    #
+    - name: General | Install required packages.
+      action: apt pkg=$item state=installed
+      with_items:
+        - subversion
+        - php5-fpm
+        - php5-mysql
+        - nginx-full
+        - mysql-server
+        - mysql-client
+        - unzip
+        - git
+        - screen
+        - vim
+        - python-mysqldb
+        - varnish
+        - curl
+        - htop
+        - python-pycurl
+        - netcat-traditional
+     # Vundle!
+    - name: add vundle
+      git: repo=git://github.com/gmarik/vundle.git dest=/home/aric/.vim/bundle/vundle
+      tags: vim
+
+    - name : enable vundle
+      command: vim +BundleInstall +qall
+      tags: vim
+    # Wordpress
+    #
+    - name: Wordpress
+      subversion: repo=http://core.svn.wordpress.org/$wordpress_version dest=/var/www/wordpress
+      tags: wordpress
+
+    ##
+    - name: chown wp
+      file: path=/var/www/wordpress recurse=yes owner=www-data group=www-data state=directory
+      tags: wordpress
+
+    - name: Create the uploads directory.
+      file: state=directory path=/srv/www/wp-uploads/aricgardner.com/ owner=www-data group=www-data
+      tags: wordpress
+
+    - name: Add nginx config
+      action: template src=templates/nginx_conf.j2 dest=/etc/nginx/sites-enabled/wordpress owner=root group=root
+      tags: wordpress
+
+    - name: Remove nginx default config
+      action: file path=/etc/nginx/sites-enabled/default state=absent
+      tags: wordpress
+
+    - name: Add varnish config
+      action: copy src=files/varnish_conf dest=/etc/varnish/default.vcl owner=root group=root
+      tags: wordpress
+
+    - name: Add varnish etc default config
+      action: copy src=files/varnish_default dest=/etc/default/varnish owner=root group=root
+      tags: wordpress
+      
+    - name: Wordpress MySQL database
+      mysql_db: db=$wordpress_db_name encoding=utf8 collation=utf8_general_ci state=present
+      tags: wordpress
+
+    - name: Wordpress MySQL user
+      mysql_user: name=$wordpress_db_user password=$wordpress_mysql_user_passwd priv=$wordpress_db_name.*:ALL state=present
+      tags: wordpress
+
+    - name: Fetch random salts for Wordpress config
+      command: curl https://api.wordpress.org/secret-key/1.1/salt/
+      register: wp_salt 
+      tags: wordpress
+
+    - name: Add wordpress config
+      action: template src=templates/wordpress_conf.j2 dest=/var/www/wordpress/wp-config.php owner=root group=root mode=0644
+      tags: wordpress
+
+    - name: Wordpress plugins
+      subversion: repo=http://svn.wp-plugins.org/{{ item.name }}/tags/{{ item.version }}/ dest=/var/www/wordpress/wp-content/plugins/{{ item.name }}
+      tags: wordpress-plugins
+      with_items:
+        - {name: embed-github-gist, version: 0.9}
+        - {name: syntaxhighlighter, version: 3.1.7} 
+        - {name: disqus-comment-system, version: 2.74} 
+        - {name: rss-includes-pages, version: 1.4.2} 
+        - {name: lockdown-wp-admin, version: 2.1} 
+
+  # Security
+  #
+ 
+    - name: Block tor exit nodes 
+      action: copy src=files/block_tor_exit_nodes dest=/etc/cron.daily/block_tor_exit_nodes
+      tags: security
+  ##
+  # Restart services
+  #
+  #
+  
+
+    - name: Restart nginx
+      action: service name=nginx state=restarted
+      tags: restart 
+
+    - name: Restart varnish
+      action: service name=varnish state=restarted
+      tags: restart 
+
+    - name: Restart php5-fpm    
+      action: service name=php5-fpm state=restarted
+      tags: restart 
+
+    - name: Restart sshd 
+      action: service name=ssh state=restarted
+      tags: restart 
+
+

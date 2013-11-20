@@ -1,0 +1,125 @@
+server {
+
+    listen       127.0.0.1:8888;                # your server's public IP address
+
+    set_real_ip_from  127.0.0.1;
+    real_ip_header    X-Forwarded-For;
+
+    server_name  {{ server_hostname }} www.{{ server_hostname }} wordpress;                   # your domain name
+    root         /var/www/wordpress/;  # absolute path to your WordPress installation
+
+    index index.php;
+
+    access_log /var/log/nginx/wordpress-access_log;
+    error_log /var/log/nginx/wordpress-error_log;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+# rewrite ^/wp-uploads/(.*)$ /srv/www/wp-uploads/$host/$1;
+
+    }
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_index index.php;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include /etc/nginx/fastcgi_params;
+    }
+
+location /wp-uploads/ {
+    rewrite ^/wp-uploads/(.*)$ /$1 break;
+
+#rewrite ^/wp-uploads/(.*)$ /srv/www/wp-uploads/$host/$1;
+#
+  root /srv/www/wp-uploads/$host;
+}
+
+### Security
+
+location = /favicon.ico {
+  log_not_found off;
+  access_log off;
+}
+
+location = /robots.txt {
+  allow all;
+  log_not_found off;
+  access_log off;
+}
+
+location ~ /\. {
+  deny all;
+}
+
+location ~* /(?:wp-uploads|files)/.*\.php$ {
+  deny all;
+}
+###
+
+}
+
+# HTTPS server
+#
+server {
+  listen 443;
+  server_name aricgardner.com wordpress;
+
+  root         /var/www/wordpress/;  # absolute path to your WordPress installation
+  index index.php;
+  access_log /var/log/nginx/wordpress-ssl-access_log;
+  error_log /var/log/nginx/wordpress-ssl-error_log;
+
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+
+  ssl on;
+  ssl_certificate /etc/ssl/certs/ssl-cert-snakeoil.pem;
+  ssl_certificate_key  /etc/ssl/private/ssl-cert-snakeoil.key;
+
+  ssl_session_timeout 5m;
+
+  ssl_protocols SSLv3 TLSv1;
+  ssl_ciphers ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+  ssl_prefer_server_ciphers on;
+
+    location ~ \.php$ {
+        try_files $uri =404;
+        fastcgi_index index.php;
+        fastcgi_pass 127.0.0.1:9000;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include /etc/nginx/fastcgi_params;
+    }
+
+location /wp-uploads/ {
+                rewrite ^/wp-uploads/(.*)$ /$1 break;
+          root /srv/www/wp-uploads/$host;
+
+}
+
+
+### Security
+
+location = /favicon.ico {
+        log_not_found off;
+        access_log off;
+}
+
+location = /robots.txt {
+        allow all;
+        log_not_found off;
+        access_log off;
+}
+
+location ~ /\. {
+        deny all;
+}
+
+location ~* /(?:wp-uploads|files)/.*\.php$ {
+        deny all;
+}
+###
+
+}

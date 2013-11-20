@@ -1,0 +1,53 @@
+set t_Co=256
+set nocompatible               " be iMproved
+filetype off                   " required!
+syntax on
+set ts=2
+set expandtab
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+ 
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
+Bundle 'croaky/vim-colors-github'
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+Bundle 'tpope/vim-rails.git'
+Bundle 'L9'
+Bundle 'FuzzyFinder'
+Bundle 'puppetlabs/puppet-syntax-vim'
+Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'git://github.com/scrooloose/nerdtree.git'
+Bundle 'git://github.com/Shougo/neocomplcache.git'
+Bundle 'flazz/vim-colorschemes'
+Bundle 'git://github.com/vim-scripts/restore_view.vim.git'
+Bundle 'git://github.com/altercation/vim-colors-solarized.git'
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+"
+filetype plugin indent on     " required!
+"Neo Complete
+let g:neocomplcache_enable_at_startup = 1
+"Remeber Cursor position
+set viewoptions=cursor,folds,slash,unix
+" let g:skipview_files = ['*\.vim']
+set relativenumber
+"color wombat256
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+ 
+"Get off my lawn
+nnoremap <Left> :echoe "Use h"<CR>
+nnoremap <Right> :echoe "Use l"<CR>
+nnoremap <Up> :echoe "Use k"<CR>
+nnoremap <Down> :echoe "Use j"<CR>

@@ -1,0 +1,35 @@
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias ls='ls -F'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+        test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+        alias ls='ls --color=auto'
+        alias dir='dir --color=auto'
+        alias vdir='vdir --color=auto'
+        alias grep='grep --color=auto'
+        alias fgrep='fgrep --color=auto'
+        alias egrep='egrep --color=auto'
+fi
+
+DEBFULLNAME="Aric Gardner"; export DEBFULLNAME
+DEBEMAIL="aric.gardner@enovance.com"; export DEBEMAIL
+export QUILT_PATCHES=debian/patches
+export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
+alias lintiann='lintian -IviE --display-experimental --color auto --show-overrides --checksums'
+alias uscann='uscan --no-symlink --verbose --no-download'
+
+# Sexy Solarized Bash Prompt, inspired by "Extravagant Zsh Prompt"
+# Customized for the Solarized color scheme by Sean O'Neil
+
+parse_git_dirty () {
+  [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
+}
+parse_git_branch () {
+  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
+}
+
+PS1="\[${BOLD}${CYAN}\]\u \[$BASE0\]at \[$CYAN\]\h \[$BASE0\]in \[$BLUE\]\w\[$BASE0\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$YELLOW\]\$(parse_git_branch)\[$BASE0\]\n\$ \[$RESET\]"
+

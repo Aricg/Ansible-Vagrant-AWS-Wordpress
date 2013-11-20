@@ -1,0 +1,36 @@
+backend aric {
+    .host = "127.0.0.1";
+    .port = "8888";
+}
+
+sub vcl_recv {
+
+  if (req.restarts == 0) {
+      if (req.http.X-Forwarded-For) {
+    set req.http.X-Forwarded-For = req.http.X-Forwarded-For + ", " + client.ip;
+      } else {
+    set req.http.X-Forwarded-For = client.ip;
+      }
+  }
+
+  if (!(req.url ~ "wp-(login|admin)")) {
+      unset req.http.cookie;
+  }
+
+  # Anything else left?
+  if (!req.http.cookie) {
+      unset req.http.cookie;
+  }
+  # Try a cache-lookup
+  return (lookup);
+
+}
+
+
+# Drop any cookies Wordpress tries to send back to the client.
+sub vcl_fetch {
+
+  if (!(req.url ~ "wp-(login|admin)")) {
+      unset beresp.http.set-cookie;
+  }
+}
