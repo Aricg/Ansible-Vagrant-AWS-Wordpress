@@ -21,7 +21,7 @@ Before You Start
 * edit ./provisioning/vars/settings.yml 
 * edit ./provisioning/hosts to reflect your network settings in your Vagrantfile 
 * replace aric with your desired username in playbook.yml
-* * add your public key to ./provisioning/files/$yourname.pub
+* add your public key to ./provisioning/files/$yourname.pub
 
 Optional: after the machine is provisioned
 ------------------------------------------
