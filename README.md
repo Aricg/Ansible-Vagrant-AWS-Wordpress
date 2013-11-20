@@ -130,7 +130,7 @@ Thats all folks
 
 License
 -------
-      First of all there are certainly somethings you dont want, like the finger script I wrote and the cronjob that blocks tor exit nodes. So please modify this before you do anything serious with it
-      That said: The usage of the works is permitted provided that this instrument is retained with the works, so that any entity that uses the works is notified of this instrument.
-      DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.
+First of all there are certainly somethings you dont want, like the finger script I wrote and the cronjob that blocks tor exit nodes. So please modify this before you do anything serious with it
+That said: The usage of the works is permitted provided that this instrument is retained with the works, so that any entity that uses the works is notified of this instrument.
+DISCLAIMER: THE WORKS ARE WITHOUT WARRANTY.
 
