@@ -2,12 +2,16 @@ Quick Start
 -----
 
 * Add an approriate vagrant box
-      
+
+```      
       vagrant box add wordpress-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+```
 
 * clone this repo as ~/YourVagrantDir/provisioning
 
+```
       git clone https://github.com/Aricg/Ansible-Vagrant-AWS-Wordpress.git provisioning/
+```
 
 * Edit your vagrant file for openbox
 
