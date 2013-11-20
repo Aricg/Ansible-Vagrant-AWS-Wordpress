@@ -1,5 +1,6 @@
 Uses Vagrant and ansible to launch Wordpress 3.7.1 with nginx and varnish on Ubuntu precise 64
 
+
 Usage
 -----
       vagrant up
@@ -8,15 +9,24 @@ if you make any changes to the ansible and want to run it again:
     
       vagrant provision
 
-Before you start
+
+Before You Start
 ----------------
-      * edit ./provisioning/vars/settings.yml 
-      * add your public key to ./provisioning/files/$yourname.pub
+
+*Get Vagrant and figure out how it works
+*Get a box close to the one you will be launching in ec2
+      
+      vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+
+* edit ./provisioning/vars/settings.yml 
+* edit ./provisioning/hosts to reflect your network settings in your Vagrantfile 
+* replace aric with your desired username in playbook.yml
+* * add your public key to ./provisioning/files/$yourname.pub
 
 Optional: after the machine is provisioned
 ------------------------------------------
-      * manually put the the old dump of your wordpress database in place (if applicable)
-      * manually untar your wp-uploads into /srv/www/wp-uploads/yoursite.name/
+* manually put the the old dump of your wordpress database in place (if applicable)
+* manually untar your wp-uploads into /srv/www/wp-uploads/yoursite.name/
 
 What exactly gets provisioned?
 ------------------------------
@@ -43,18 +53,26 @@ What exactly gets provisioned?
       * curl
       * a cron.daily that blocks the tor exit nodes of the day
 
+Okay, that was for a local deployment with Vagrant, now onto ec2.
+
+
+Part2
+-----
 
 Pushing your vagrant image to ec2
 --------------------------------- 
-vagrant plugin install  vagrant-aws
-vagrant plugin list
-# Get a box like the one you will be launching in ec2 and test your deployment locally in virtual box
-How to do this is not covered by this readme
+*install vagrant aws plugin
 
+      vagrant plugin install vagrant-aws
+      vagrant plugin list
       vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
-# Get a suitable ami-id
+
+*Get a suitable ami-id
+
       http://cloud-images.ubuntu.com/locator/ec2/
-# Edit your Vagrant file
+
+*Edit your Vagrant file
+
                 Vagrant.configure("2") do |config|
                   config.vm.box = "aws-precise-32"
                   config.vm.hostname = "aricgardner.com"
@@ -82,7 +100,7 @@ How to do this is not covered by this readme
         end
 
 
-#Launch your ami with vagrant  
+*Launch your ami with vagrant  
 
         vagrant up --provider=aws
         Bringing machine 'default' up with 'aws' provider...
@@ -103,12 +121,13 @@ How to do this is not covered by this readme
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
 
 * Provision with ansible
-Grab the hostname add it to provisioning hosts and then run vagrant provision
+Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
-        vim provisioning/hosts
-        vagrant provision
+      vim provisioning/hosts
+      vagrant provision
 
 
+Thats all folks
 
 License
 -------
