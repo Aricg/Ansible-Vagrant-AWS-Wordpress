@@ -7,6 +7,8 @@ Quick Start
 
 *clone this repo as ~/YourVagrantDir/provisioning
 
+      git clone https://github.com/Aricg/Ansible-Vagrant-AWS-Wordpress.git provisioning/
+
 *Edit your vagrant file for openbox
 
 ```
