@@ -1,8 +1,10 @@
 Uses Vagrant and ansible to launch Wordpress 3.7.1 with nginx and varnish on Ubuntu precise 64
 
-
 Usage
 -----
+      
+      vagrant box add precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+
       vagrant up
       
 if you make any changes to ansible's configs and want to run ansible again
@@ -14,10 +16,7 @@ Before You Start
 ----------------
 
 * Get Vagrant and figure out how it works
-* Get a box close to the one you will be launching in ec2
-      
-      vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
-
+* Get a box close to the one you will be launching in ec2 (ie cloud-images.ubuntu.com)
 * edit ./provisioning/vars/settings.yml 
 * edit ./provisioning/hosts to reflect your network settings in your Vagrantfile 
 * replace aric with your desired username in playbook.yml
@@ -33,7 +32,7 @@ What exactly gets provisioned?
       * Unattended security updates
       * Your user, with sudo and public key access
       * My bashrc
-      * Screenfetch https://github.com/KittyKatt/screenFetch
+      * Screenfetch https://github.com/KittyKatt/screenFetch (call it in .profile to enable)
       * Vim with vundle, my favorite modules and the solorized theme
       * My finger script (finger foo@aricgardner.com for an example) 
       * Varish http accelerator
@@ -53,23 +52,22 @@ What exactly gets provisioned?
       * curl
       * a cron.daily that blocks the tor exit nodes of the day
 
-Okay, that was for a local deployment with Vagrant, now onto ec2.
 
+Part2 Pushing your vagrant image to ec2
+---------------------------------------- 
 
-Part2
------
-
-Pushing your vagrant image to ec2
---------------------------------- 
 *Install vagrant aws plugin
 
       vagrant plugin install vagrant-aws
       vagrant plugin list
-      vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+
+*Add the Dummy box
+
+      vagrant box add aws-precise-32 https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
 
 * Get a suitable ami-id
 
-      http://cloud-images.ubuntu.com/locator/ec2/
+      [[http://cloud-images.ubuntu.com/locator/ec2/]]
 
 *Edit your Vagrant file
 
@@ -103,10 +101,6 @@ Pushing your vagrant image to ec2
 
         vagrant up --provider=aws
         Bringing machine 'default' up with 'aws' provider...
-        WARNING: Nokogiri was built against LibXML version 2.8.0, but has dynamically loaded 2.9.1
-        [default] Warning! The AWS provider doesn't support any of the Vagrant
-        high-level network configurations (`config.vm.network`). They
-        will be silently ignored.
         [default] Launching an instance with the following settings...
         [default]  -- Type: t1.micro
         [default]  -- AMI: ami-c5a98cac
@@ -120,6 +114,7 @@ Pushing your vagrant image to ec2
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
 
 *Provision with ansible
+
 Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
       vim provisioning/hosts
