@@ -149,7 +149,8 @@ Part2 Pushing your vagrant image to ec2
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
 ```
 
-* Provision with ansible
+Provision launched ec2 machine with ansible
+-------------------------------------------
 
 Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
