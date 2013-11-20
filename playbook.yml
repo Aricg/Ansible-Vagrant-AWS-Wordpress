@@ -68,11 +68,11 @@
       tags: apt
 
     - name: Create the .vim directory.
-      file: state=directory path=/home/aric/.vim/bundle/vundle/
+      action: file state=directory path=/home/aric/.vim/bundle/vundle/
       tags: vim
 
     - name: Create the .vim color directory.
-      file: state=directory path=/home/aric/.vim/colors/
+      action file state=directory path=/home/aric/.vim/colors/
       tags: vim
 
     - name: Add vims dot file
