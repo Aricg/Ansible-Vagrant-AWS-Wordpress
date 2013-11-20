@@ -57,28 +57,28 @@ Optional: after the machine is provisioned
 
 What exactly gets provisioned?
 ------------------------------
-      * Unattended security updates
-      * Your user, with sudo and public key access
-      * My bashrc (ha!)
-      * Screenfetch https://github.com/KittyKatt/screenFetch (call it in .profile to enable)
-      * Vim with vundle, my favorite modules and the solorized theme
-      * My finger script (finger foo@aricgardner.com for an example) 
-      * Varish http accelerator
-      * nginx
-      * php-fpm
-      * mysql
-      * wordpress 3.7.1
-          * Lockdown WP
-          * Disquis
-          * RSS Includes Pages
-          * Syntax Highlighter Evolved
-          * Embed GitHub Gist
-      * git
-      * screen
-      * subversion
-      * htop
-      * curl
-      * a cron.daily that blocks the tor exit nodes of the day
+* Unattended security updates
+* Your user, with sudo and public key access
+* My bashrc (ha!)
+* Screenfetch https://github.com/KittyKatt/screenFetch (call it in .profile to enable)
+* Vim with vundle, my favorite modules and the solorized theme
+* My finger script (finger foo@aricgardner.com for an example) 
+* Varish http accelerator
+* nginx
+* php-fpm
+* mysql
+* git
+* screen
+* subversion
+* htop
+* curl
+* a cron.daily that blocks the tor exit nodes of the day
+* wordpress 3.7.1
+        * Lockdown WP
+        * Disquis
+        * RSS Includes Pages
+        * Syntax Highlighter Evolved
+        * Embed GitHub Gist
 
 
 Part2 Pushing your vagrant image to ec2
