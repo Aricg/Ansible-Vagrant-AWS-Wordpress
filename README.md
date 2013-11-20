@@ -31,12 +31,16 @@ end
 
 * Launch! 
 
+```
       vagrant up
+```
       
 * if you make any changes to ansible's configs and want to run ansible again
     
+```
       vagrant provision
 
+```
 
 Important Steps that you just missed
 ------------------------------------
@@ -82,12 +86,16 @@ Part2 Pushing your vagrant image to ec2
 
 * Install vagrant aws plugin
 
+```
       vagrant plugin install vagrant-aws
       vagrant plugin list
+```
 
 * Add the Dummy box
 
+```
       vagrant box add aws-precise-32 https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
+```
 
 * Get a suitable ami-id
 
@@ -95,6 +103,7 @@ Part2 Pushing your vagrant image to ec2
 
 * Edit your Vagrant file
 
+```
                 Vagrant.configure("2") do |config|
                   config.vm.box = "aws-precise-32"
                   config.vm.hostname = "aricgardner.com"
@@ -119,10 +128,12 @@ Part2 Pushing your vagrant image to ec2
           end
 
         end
+```
 
 
 * Launch your ami with vagrant  
 
+```
         vagrant up --provider=aws
         Bringing machine 'default' up with 'aws' provider...
         [default] Launching an instance with the following settings...
@@ -136,13 +147,16 @@ Part2 Pushing your vagrant image to ec2
         [default] Waiting for SSH to become available...
         [default] Machine is booted and ready for use!
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
+```
 
 * Provision with ansible
 
 Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
+```
       vim provisioning/hosts
       vagrant provision
+```
 
 
 Thats all folks
