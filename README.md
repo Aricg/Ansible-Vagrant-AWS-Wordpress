@@ -1,5 +1,3 @@
-Uses Vagrant and ansible to launch Wordpress 3.7.1 with nginx and varnish on Ubuntu precise 64
-
 Quick Start
 -----
 
