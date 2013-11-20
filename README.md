@@ -1,15 +1,15 @@
 Quick Start
 -----
 
-*Add an approriate vagrant box
+* Add an approriate vagrant box
       
       vagrant box add wordpress-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
 
-*clone this repo as ~/YourVagrantDir/provisioning
+* clone this repo as ~/YourVagrantDir/provisioning
 
       git clone https://github.com/Aricg/Ansible-Vagrant-AWS-Wordpress.git provisioning/
 
-*Edit your vagrant file for openbox
+* Edit your vagrant file for openbox
 
 ```
 Vagrant.configure("2") do |config|
@@ -25,11 +25,11 @@ Vagrant.configure("2") do |config|
 end
 ```
 
-*Launch! 
+* Launch! 
 
       vagrant up
       
-*if you make any changes to ansible's configs and want to run ansible again
+* if you make any changes to ansible's configs and want to run ansible again
     
       vagrant provision
 
@@ -76,12 +76,12 @@ What exactly gets provisioned?
 Part2 Pushing your vagrant image to ec2
 ---------------------------------------- 
 
-*Install vagrant aws plugin
+* Install vagrant aws plugin
 
       vagrant plugin install vagrant-aws
       vagrant plugin list
 
-*Add the Dummy box
+* Add the Dummy box
 
       vagrant box add aws-precise-32 https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box
 
@@ -89,7 +89,7 @@ Part2 Pushing your vagrant image to ec2
 
       [[http://cloud-images.ubuntu.com/locator/ec2/]]
 
-*Edit your Vagrant file
+* Edit your Vagrant file
 
                 Vagrant.configure("2") do |config|
                   config.vm.box = "aws-precise-32"
@@ -133,7 +133,7 @@ Part2 Pushing your vagrant image to ec2
         [default] Machine is booted and ready for use!
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
 
-*Provision with ansible
+* Provision with ansible
 
 Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
