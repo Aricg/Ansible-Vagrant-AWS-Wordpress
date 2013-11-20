@@ -61,7 +61,7 @@ Part2
 
 Pushing your vagrant image to ec2
 --------------------------------- 
-* Install vagrant aws plugin
+*Install vagrant aws plugin
 
       vagrant plugin install vagrant-aws
       vagrant plugin list
@@ -71,13 +71,12 @@ Pushing your vagrant image to ec2
 
       http://cloud-images.ubuntu.com/locator/ec2/
 
-* Edit your Vagrant file
+*Edit your Vagrant file
 
                 Vagrant.configure("2") do |config|
                   config.vm.box = "aws-precise-32"
                   config.vm.hostname = "aricgardner.com"
                   config.vm.boot_timeout = 120
-
                   config.vm.provider :aws do |aws, override|
                     aws.access_key_id = "YOURKEY"
                     aws.secret_access_key = "YOUR_SECRET_KEY"
@@ -120,7 +119,7 @@ Pushing your vagrant image to ec2
         [default] Machine is booted and ready for use!
         [default] Rsyncing folder: /Users/aric/vagrant_getting_started/ => /vagrant
 
-* Provision with ansible
+*Provision with ansible
 Grab the hostname add it to provisioning/hosts and then run vagrant provision
 
       vim provisioning/hosts
