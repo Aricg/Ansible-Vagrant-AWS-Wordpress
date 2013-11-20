@@ -1,22 +1,42 @@
 Uses Vagrant and ansible to launch Wordpress 3.7.1 with nginx and varnish on Ubuntu precise 64
 
-Usage
+Quick Start
 -----
+
+*Add an approriate vagrant box
       
-      vagrant box add precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+      vagrant box add wordpress-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
+
+*clone this repo as ~/YourVagrantDir/provisioning
+
+*Edit your vagrant file for openbox
+
+```
+Vagrant.configure("2") do |config|
+  config.vm.box = "wordpress-precise32"
+
+  config.vm.network :forwarded_port, guest: 80, host: 8080
+  config.vm.network :private_network, ip: "192.168.100.10"
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "provisioning/playbook.yml"
+    ansible.inventory_path = "provisioning/hosts"
+  end
+end
+```
+
+*Launch! 
 
       vagrant up
       
-if you make any changes to ansible's configs and want to run ansible again
+*if you make any changes to ansible's configs and want to run ansible again
     
       vagrant provision
 
 
-Before You Start
-----------------
+Important Steps that you just missed
+------------------------------------
 
-* Get Vagrant and figure out how it works
-* Get a box close to the one you will be launching in ec2 (ie cloud-images.ubuntu.com)
 * edit ./provisioning/vars/settings.yml 
 * edit ./provisioning/hosts to reflect your network settings in your Vagrantfile 
 * replace aric with your desired username in playbook.yml
@@ -31,7 +51,7 @@ What exactly gets provisioned?
 ------------------------------
       * Unattended security updates
       * Your user, with sudo and public key access
-      * My bashrc
+      * My bashrc (ha!)
       * Screenfetch https://github.com/KittyKatt/screenFetch (call it in .profile to enable)
       * Vim with vundle, my favorite modules and the solorized theme
       * My finger script (finger foo@aricgardner.com for an example) 
