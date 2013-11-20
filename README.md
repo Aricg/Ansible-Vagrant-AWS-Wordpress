@@ -5,7 +5,7 @@ Usage
 -----
       vagrant up
       
-if you make any changes to the ansible and want to run it again:
+if you make any changes to ansible's configs and want to run ansible again
     
       vagrant provision
 
@@ -13,8 +13,8 @@ if you make any changes to the ansible and want to run it again:
 Before You Start
 ----------------
 
-*Get Vagrant and figure out how it works
-*Get a box close to the one you will be launching in ec2
+* Get Vagrant and figure out how it works
+* Get a box close to the one you will be launching in ec2
       
       vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
 
@@ -61,17 +61,17 @@ Part2
 
 Pushing your vagrant image to ec2
 --------------------------------- 
-*install vagrant aws plugin
+* Install vagrant aws plugin
 
       vagrant plugin install vagrant-aws
       vagrant plugin list
       vagrant box add aws-precise32 http://cloud-images.ubuntu.com/vagrant/precise/current/precise-server-cloudimg-i386-vagrant-disk1.box
 
-*Get a suitable ami-id
+* Get a suitable ami-id
 
       http://cloud-images.ubuntu.com/locator/ec2/
 
-*Edit your Vagrant file
+* Edit your Vagrant file
 
                 Vagrant.configure("2") do |config|
                   config.vm.box = "aws-precise-32"
@@ -100,7 +100,7 @@ Pushing your vagrant image to ec2
         end
 
 
-*Launch your ami with vagrant  
+* Launch your ami with vagrant  
 
         vagrant up --provider=aws
         Bringing machine 'default' up with 'aws' provider...
