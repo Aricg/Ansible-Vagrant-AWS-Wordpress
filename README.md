@@ -74,11 +74,11 @@ What exactly gets provisioned?
 * curl
 * a cron.daily that blocks the tor exit nodes of the day
 * wordpress 3.7.1
-        * Lockdown WP
-        * Disquis
-        * RSS Includes Pages
-        * Syntax Highlighter Evolved
-        * Embed GitHub Gist
+  * Lockdown WP
+  * Disquis
+  * RSS Includes Pages
+  * Syntax Highlighter Evolved
+  * Embed GitHub Gist
 
 
 Part2 Pushing your vagrant image to ec2
