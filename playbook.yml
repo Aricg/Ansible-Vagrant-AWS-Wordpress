@@ -118,6 +118,7 @@
         - htop
         - python-pycurl
         - netcat-traditional
+        - nmap
      # Vundle!
     - name: add vundle
       git: repo=git://github.com/gmarik/vundle.git dest=/home/aric/.vim/bundle/vundle
