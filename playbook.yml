@@ -105,6 +105,7 @@
         - subversion
         - php5-fpm
         - php5-mysql
+        - php5-gd
         - nginx-full
         - mysql-server
         - mysql-client
