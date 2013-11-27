@@ -5,6 +5,7 @@ syntax on
 set ts=2
 set shiftwidth=2
 set expandtab
+set showmatch
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
  
