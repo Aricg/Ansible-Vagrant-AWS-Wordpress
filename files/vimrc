@@ -2,6 +2,7 @@ set t_Co=256
 set nocompatible               " be iMproved
 filetype off                   " required!
 syntax on
+set scrolloff=999
 set ts=2
 set shiftwidth=2
 set expandtab
