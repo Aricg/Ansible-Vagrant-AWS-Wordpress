@@ -3,6 +3,15 @@ alias la='ls -A'
 alias l='ls -CF'
 alias ls='ls -F'
 
+
+#Don't lose history Items
+
+HISTFILESIZE=400000000
+HISTSIZE=10000
+PROMPT_COMMAND="history -a"
+export HISTSIZE PROMPT_COMMAND
+shopt -s histappend
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
         test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
