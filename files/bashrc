@@ -5,12 +5,17 @@ alias ls='ls -F'
 
 
 #Don't lose history Items
-
 HISTFILESIZE=400000000
 HISTSIZE=10000
 PROMPT_COMMAND="history -a"
 export HISTSIZE PROMPT_COMMAND
 shopt -s histappend
+
+#pretty git log
+function lg
+{
+command git log --graph --pretty=format:'%Cred%h%Creset - %ce %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit --date=relative "$@"
+}
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
