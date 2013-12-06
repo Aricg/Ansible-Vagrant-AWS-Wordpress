@@ -106,6 +106,7 @@
         - php5-fpm
         - php5-mysql
         - php5-gd
+        - php-apc
         - nginx-full
         - mysql-server
         - mysql-client
