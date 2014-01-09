@@ -1,3 +1,13 @@
+for x in $(who | awk '{print $1}');
+
+do
+
+  if ! [[ $x = $(whoami) ]]; then
+echo -n "Other Logged in Users: "; who | grep $x
+  fi;
+done
+
+
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
