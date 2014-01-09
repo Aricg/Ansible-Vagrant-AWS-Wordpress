@@ -3,20 +3,6 @@ alias la='ls -A'
 alias l='ls -CF'
 alias ls='ls -F'
 
-
-#Don't lose history Items
-HISTFILESIZE=400000000
-HISTSIZE=10000
-PROMPT_COMMAND="history -a"
-export HISTSIZE PROMPT_COMMAND
-shopt -s histappend
-
-#pretty git log
-function lg
-{
-command git log --graph --pretty=format:'%Cred%h%Creset - %ce %C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)%Creset' --abbrev-commit --date=relative "$@"
-}
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
         test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -28,15 +14,34 @@ if [ -x /usr/bin/dircolors ]; then
         alias egrep='egrep --color=auto'
 fi
 
-DEBFULLNAME="Aric Gardner"; export DEBFULLNAME
-DEBEMAIL="aric.gardner@enovance.com"; export DEBEMAIL
+DEBFULLNAME="Jhon Doe"; export DEBFULLNAME
+DEBEMAIL="Jhon.Doe@default.org"; export DEBEMAIL
 export QUILT_PATCHES=debian/patches
 export QUILT_REFRESH_ARGS="-p ab --no-timestamps --no-index"
 alias lintiann='lintian -IviE --display-experimental --color auto --show-overrides --checksums'
 alias uscann='uscan --no-symlink --verbose --no-download'
 
-# Sexy Solarized Bash Prompt, inspired by "Extravagant Zsh Prompt"
-# Customized for the Solarized color scheme by Sean O'Neil
+if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
+BASE03=$(tput setaf 234)
+BASE02=$(tput setaf 235)
+BASE01=$(tput setaf 240)
+BASE00=$(tput setaf 241)
+BASE0=$(tput setaf 244)
+BASE1=$(tput setaf 245)
+BASE2=$(tput setaf 254)
+BASE3=$(tput setaf 230)
+YELLOW=$(tput setaf 136)
+ORANGE=$(tput setaf 166)
+RED=$(tput setaf 160)
+MAGENTA=$(tput setaf 125)
+VIOLET=$(tput setaf 61)
+BLUE=$(tput setaf 33)
+CYAN=$(tput setaf 37)
+GREEN=$(tput setaf 64)
+RESET=$(tput sgr0)
+else
+RESET="\033[m"
+fi
 
 parse_git_dirty () {
   [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
@@ -45,5 +50,4 @@ parse_git_branch () {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
 }
 
-PS1="\[${BOLD}${CYAN}\]\u \[$BASE0\]at \[$CYAN\]\h \[$BASE0\]in \[$BLUE\]\w\[$BASE0\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$YELLOW\]\$(parse_git_branch)\[$BASE0\]\n\$ \[$RESET\]"
-
+PS1="\[ \$(if ! [ \$? = 0 ]; then printf '\e[033;31m \xE2\x98\xA0 '; fi)\]\[${BOLD}${CYAN}\]\u \[$BASE0\]at \[$CYAN\]\h\[$BLUE\]\w\[$BASE0\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$YELLOW\]\$(parse_git_branch)\[$BASE0\]\n\$ \[$RESET\]"
