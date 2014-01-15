@@ -27,6 +27,7 @@ Bundle 'git://github.com/Shougo/neocomplcache.git'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'git://github.com/vim-scripts/restore_view.vim.git'
 Bundle 'git://github.com/altercation/vim-colors-solarized.git'
+Bundle 'git://github.com/jeffkreeftmeijer/vim-numbertoggle.git'
 "
 " Brief help
 " :BundleList          - list configured bundles
@@ -48,13 +49,8 @@ set relativenumber
 set background=dark
 let g:solarized_termcolors=256
 colorscheme solarized
+let g:NumberToggleTrigger="<F2>"
  
-"Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
-
 "Disable Ex mode
 nnoremap Q <nop>
 
