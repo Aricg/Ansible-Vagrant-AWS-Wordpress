@@ -1,3 +1,5 @@
+set -o vi
+
 for x in $(who | awk '{print $1}');
 
 do
