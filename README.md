@@ -52,7 +52,7 @@ Important Steps that you just missed
 
 Optional: after the machine is provisioned
 ------------------------------------------
-* manually put the the old dump of your wordpress database in place (if applicable)
+* manually put the old dump of your wordpress database in place (if applicable)
 * manually untar your wp-uploads into /srv/www/wp-uploads/yoursite.name/
 
 What exactly gets provisioned?
